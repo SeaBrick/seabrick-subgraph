@@ -52,8 +52,8 @@ dataSources:
           handler: handleOwnershipTransferred
         - event: SaleDetails(address,uint256)
           handler: handleSaleDetails
-        - event: Buy(address)
+        - event: Buy(address,uint256,uint256,bytes32)
           handler: handleBuy
-        - event: Claimed(address,uint256)
+        - event: Claimed(address,uint256,bytes32)
           handler: handleClaimed
       file: ./src/market.ts

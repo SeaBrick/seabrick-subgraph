@@ -1,19 +1,21 @@
-import { Address, BigInt, Bytes } from "@graphprotocol/graph-ts";
+import { Address, BigInt } from "@graphprotocol/graph-ts";
 import {
   AggregatorAdded as AggregatorAddedEvent,
   Buy as BuyEvent,
   Claimed as ClaimedEvent,
-  IMarket,
   OwnershipTransferred as OwnershipTransferredEvent,
   SaleDetails as SaleDetailsEvent,
 } from "../generated/SeabrickMarket/IMarket";
 import { AggregatorV3Interface } from "../generated/SeabrickMarket/AggregatorV3Interface";
 import {
   AggregatorData,
+  Buy,
+  Claimed,
   ERC20Token,
   SeabrickMarketContract,
   Transfer,
 } from "../generated/schema";
+import { getERC20Token, getSeabrickMarketContract } from "./utils";
 
 export function handleAggregatorAdded(event: AggregatorAddedEvent): void {
   let name = event.params.name;
@@ -38,7 +40,7 @@ export function handleAggregatorAdded(event: AggregatorAddedEvent): void {
   // Add the token entity
   let erc20Entity = ERC20Token.load(token);
   if (!erc20Entity) {
-    erc20Entity = createERC20Token(token);
+    erc20Entity = getERC20Token(token);
   }
 
   aggregatorEntity.token = erc20Entity.id;
@@ -64,25 +66,54 @@ export function handleSaleDetails(event: SaleDetailsEvent): void {
   entity.save();
 }
 
-function getSeabrickMarketContract(contract_: Address): SeabrickMarketContract {
-  let entity = SeabrickMarketContract.load(contract_);
+export function handleBuy(event: BuyEvent): void {
+  let entity = new Buy(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  );
 
-  if (!entity) {
-    entity = new SeabrickMarketContract(contract_);
+  let aggregator = AggregatorData.load(event.params.aggregator);
 
-    entity.owner = Address.zero();
-    entity.price = BigInt.zero();
-    entity.token = Address.zero();
+  if (aggregator) {
+    entity.buyer = event.params.buyer;
+    entity.tokenId = event.params.id;
+    entity.aggregator = aggregator.id;
+
+    // Update the total collected
+    let erc20Token = getERC20Token(aggregator.token);
+    erc20Token.totalCollected = erc20Token.totalCollected.plus(
+      event.params.amountSpent
+    );
+
+    entity.blockNumber = event.block.number;
+    entity.blockTimestamp = event.block.timestamp;
+    entity.transactionHash = event.transaction.hash;
+
+    erc20Token.save();
+    entity.save();
   }
-
-  return entity;
 }
 
-function createERC20Token(contract_: Address): ERC20Token {
-  let entity = new ERC20Token(contract_);
+export function handleClaimed(event: ClaimedEvent): void {
+  let entity = new Claimed(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  );
 
-  entity.address = Address.zero();
-  entity.totalCollected = BigInt.zero();
+  let aggregator = AggregatorData.load(event.params.aggregator);
 
-  return entity;
+  if (aggregator) {
+    entity.amount = event.params.amount;
+    entity.token = event.params.token;
+    entity.aggregator = aggregator.id;
+
+    // Update the total collected
+    let erc20Token = getERC20Token(aggregator.token);
+    erc20Token.totalCollected = BigInt.zero();
+
+    entity.blockNumber = event.block.number;
+    entity.blockTimestamp = event.block.timestamp;
+    entity.transactionHash = event.transaction.hash;
+
+    erc20Token.save();
+    entity.save();
+  }
 }

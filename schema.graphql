@@ -52,3 +52,23 @@ type ERC20Token @entity {
   totalCollected: BigInt!
   aggregator: [AggregatorData!]! @derivedFrom(field: "token")
 }
+
+type Buy @entity(immutable: true) {
+  id: Bytes!
+  buyer: Bytes!
+  tokenId: BigInt!
+  aggregator: AggregatorData!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Claimed @entity(immutable: true) {
+  id: Bytes!
+  amount: BigInt!
+  token: Bytes!
+  aggregator: AggregatorData!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
