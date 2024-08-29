@@ -8,9 +8,9 @@ dataSources:
     name: Seabrick
     network: arbitrum-sepolia
     source:
-      address: "0x3184bcf06af7be5bcf3605e5415bf3426cef4826"
+      address: "0x29abd95eead120d3eeba397561670a2ee02483f7"
       abi: ISeabrick
-      startBlock: 75126210
+      startBlock: 75179675
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -35,9 +35,9 @@ dataSources:
     name: SeabrickMarket
     network: arbitrum-sepolia
     source:
-      address: "0x3bd574977794248413d6ad0e616a97757e576a9a"
+      address: "0xad8b0978f14c87f5b81346fbc2f375af954e0645"
       abi: IMarket
-      startBlock: 75126272
+      startBlock: 75179899
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
