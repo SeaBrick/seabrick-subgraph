@@ -3,6 +3,7 @@ type Transfer @entity(immutable: true) {
   from: Bytes! # address
   to: Bytes! # address
   tokenId: BigInt! # uint256
+  token: Token!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -22,9 +23,10 @@ type Account @entity {
 }
 
 type Token @entity {
-  id: Bytes!
+  id: Bytes! # ID is the BigInt token ID
   owner: Account!
   tokenId: BigInt!
+  burned: Boolean!
 }
 
 ###########
