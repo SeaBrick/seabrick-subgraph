@@ -1,16 +1,9 @@
 import { Address, BigInt, Bytes } from "@graphprotocol/graph-ts";
-import {
-  Approval as ApprovalEvent,
-  ApprovalForAll as ApprovalForAllEvent,
-  OwnershipTransferred as OwnershipTransferredEvent,
-  Transfer as TransferEvent,
-} from "../generated/Seabrick/ISeabrick";
+
 import {
   Account,
   SeabrickContract,
   Token,
-  Transfer,
-  AggregatorData,
   ERC20Token,
   SeabrickMarketContract,
 } from "../generated/schema";

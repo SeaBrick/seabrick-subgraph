@@ -1,16 +1,9 @@
-import { Address, BigInt, Bytes } from "@graphprotocol/graph-ts";
+import { Address, BigInt } from "@graphprotocol/graph-ts";
 import {
-  Approval as ApprovalEvent,
-  ApprovalForAll as ApprovalForAllEvent,
   OwnershipTransferred as OwnershipTransferredEvent,
   Transfer as TransferEvent,
 } from "../generated/Seabrick/ISeabrick";
-import {
-  Account,
-  SeabrickContract,
-  Token,
-  Transfer,
-} from "../generated/schema";
+import { Transfer } from "../generated/schema";
 import { getAccount, getSeabrickContract, getToken } from "./utils";
 
 export function handleOwnershipTransferred(

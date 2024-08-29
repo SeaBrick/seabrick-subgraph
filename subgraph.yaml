@@ -8,15 +8,17 @@ dataSources:
     name: Seabrick
     network: arbitrum-sepolia
     source:
-      address: "0x69e0ad478f3459973174994c00b4fa37dba269f9"
+      address: "0xdf2edaf8687c48728683049f9b097c8a36581b04"
       abi: ISeabrick
-      startBlock: 75086213
+      startBlock: 75126210
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - OwnershipTransferred
+        - Account
+        - SeabrickContract
+        - Token
         - Transfer
       abis:
         - name: ISeabrick
@@ -31,15 +33,19 @@ dataSources:
     name: SeabrickMarket
     network: arbitrum-sepolia
     source:
-      address: "0x8649b0017ef4b4162bc4f6c9d2f3889dda920466"
+      address: "0x8ccf2acc55de45464af84b90ee2f1766e06a6572"
       abi: IMarket
-      startBlock: 75086287
+      startBlock: 75126272
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - OwnershipTransferred
+        - AggregatorData,
+        - Buy,
+        - Claimed,
+        - ERC20Token,
+        - SeabrickMarketContract,
       abis:
         - name: IMarket
           file: ./abis/IMarket.json

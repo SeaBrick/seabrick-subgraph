@@ -7,14 +7,7 @@ import {
   SaleDetails as SaleDetailsEvent,
 } from "../generated/SeabrickMarket/IMarket";
 import { AggregatorV3Interface } from "../generated/SeabrickMarket/AggregatorV3Interface";
-import {
-  AggregatorData,
-  Buy,
-  Claimed,
-  ERC20Token,
-  SeabrickMarketContract,
-  Transfer,
-} from "../generated/schema";
+import { AggregatorData, Buy, Claimed, ERC20Token } from "../generated/schema";
 import { getERC20Token, getSeabrickMarketContract } from "./utils";
 
 export function handleAggregatorAdded(event: AggregatorAddedEvent): void {
