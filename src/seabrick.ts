@@ -1,4 +1,4 @@
-import { Address, BigInt, Bytes } from "@graphprotocol/graph-ts";
+import { Address, BigInt, Bytes, dataSource } from "@graphprotocol/graph-ts";
 import {
   Approval as ApprovalEvent,
   ApprovalForAll as ApprovalForAllEvent,
@@ -11,10 +11,6 @@ import {
   Token,
   Transfer,
 } from "../generated/schema";
-
-export function handleApproval(event: ApprovalEvent): void {}
-
-export function handleApprovalForAll(event: ApprovalForAllEvent): void {}
 
 export function handleOwnershipTransferred(
   event: OwnershipTransferredEvent

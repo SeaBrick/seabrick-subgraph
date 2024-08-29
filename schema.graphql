@@ -19,7 +19,7 @@ type SeabrickContract @entity {
 
 type Account @entity {
   id: Bytes! # address
-  tokens: [Token!] @derivedFrom(field: "owner")
+  tokens: [Token!]! @derivedFrom(field: "owner")
 }
 
 type Token @entity {
@@ -41,13 +41,14 @@ type SeabrickMarketContract @entity {
 type AggregatorData @entity {
   id: Bytes! # address
   name: Bytes! # Agregator hash name
+  nameReadable: String!
   aggregator: Bytes! # aggregator address
-  token: ERC20Token! @derivedFrom(field: "aggregator") # erc20 address
+  token: ERC20Token!
 }
 
 type ERC20Token @entity {
   id: Bytes! # address
   address: Bytes! # address
   totalCollected: BigInt!
-  aggregator: AggregatorData!
+  aggregator: [AggregatorData!]! @derivedFrom(field: "token")
 }

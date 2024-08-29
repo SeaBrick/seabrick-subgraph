@@ -16,18 +16,12 @@ dataSources:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - Approval
-        - ApprovalForAll
         - OwnershipTransferred
         - Transfer
       abis:
         - name: ISeabrick
           file: ./abis/ISeabrick.json
       eventHandlers:
-        - event: Approval(indexed address,indexed address,indexed uint256)
-          handler: handleApproval
-        - event: ApprovalForAll(indexed address,indexed address,bool)
-          handler: handleApprovalForAll
         - event: OwnershipTransferred(indexed address,indexed address)
           handler: handleOwnershipTransferred
         - event: Transfer(indexed address,indexed address,indexed uint256)
@@ -45,20 +39,21 @@ dataSources:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - Approval
-        - ApprovalForAll
         - OwnershipTransferred
-        - Transfer
       abis:
         - name: IMarket
           file: ./abis/IMarket.json
+        - name: AggregatorV3Interface
+          file: ./abis/AggregatorV3Interface.json
       eventHandlers:
         - event: AggregatorAdded(bytes32,address,address)
           handler: handleAggregatorAdded
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: SaleDetails(address,uint256)
+          handler: handleSaleDetails
         - event: Buy(address)
           handler: handleBuy
         - event: Claimed(address,uint256)
           handler: handleClaimed
-        - event: OwnershipTransferred(indexed address,indexed address)
-          handler: handleOwnershipTransferred
       file: ./src/market.ts
