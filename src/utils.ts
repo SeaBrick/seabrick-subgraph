@@ -35,7 +35,7 @@ export function getAccount(account_: Address): Account {
 
 export function getToken(tokenId_: BigInt): Token {
   // The BigInt as Bytes
-  const id = Bytes.fromHexString(tokenId_.toHexString());
+  const id = Bytes.fromHexString(getEvenHex(tokenId_.toHexString()));
 
   let entity = Token.load(id);
 
@@ -75,4 +75,11 @@ export function getERC20Token(contract_: Address): ERC20Token {
   }
 
   return entity;
+}
+
+function getEvenHex(value: string): string {
+  if (value.length % 2) {
+    value = value.slice(0, 2) + "0" + value.slice(2);
+  }
+  return value;
 }
