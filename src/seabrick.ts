@@ -23,11 +23,13 @@ export function handleTransfer(event: TransferEvent): void {
   // Account entities (never create an Account with zero address)
   if (event.params.from != Address.zero()) {
     let account = getAccount(event.params.from);
+
     account.save();
   }
 
   if (event.params.to != Address.zero()) {
     let account = getAccount(event.params.to);
+
     account.save();
   }
 
@@ -55,11 +57,11 @@ export function handleTransfer(event: TransferEvent): void {
   let transferEntity = new Transfer(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
+
   transferEntity.from = event.params.from;
   transferEntity.to = event.params.to;
   transferEntity.tokenId = event.params.tokenId;
   transferEntity.token = token.id;
-
   transferEntity.blockNumber = event.block.number;
   transferEntity.blockTimestamp = event.block.timestamp;
   transferEntity.transactionHash = event.transaction.hash;

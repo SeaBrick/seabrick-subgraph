@@ -12,7 +12,6 @@ import { getERC20Token, getSeabrickMarketContract } from "./utils";
 
 export function handleAggregatorAdded(event: AggregatorAddedEvent): void {
   let name = event.params.name;
-  let token = event.params.token;
   let aggregator = event.params.aggregator;
 
   // Add the aggregator entity
@@ -31,9 +30,9 @@ export function handleAggregatorAdded(event: AggregatorAddedEvent): void {
   }
 
   // Add the token entity
-  let erc20Entity = ERC20Token.load(token);
+  let erc20Entity = ERC20Token.load(event.params.token);
   if (!erc20Entity) {
-    erc20Entity = getERC20Token(token);
+    erc20Entity = getERC20Token(event.params.token);
   }
 
   aggregatorEntity.token = erc20Entity.id;
@@ -53,6 +52,7 @@ export function handleOwnershipTransferred(
 
 export function handleSaleDetails(event: SaleDetailsEvent): void {
   let entity = getSeabrickMarketContract(event.address);
+
   entity.price = event.params.price;
   entity.token = event.params.nftAddress;
 
