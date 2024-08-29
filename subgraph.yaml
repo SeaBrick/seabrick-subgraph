@@ -28,6 +28,8 @@ dataSources:
           handler: handleOwnershipTransferred
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
+        - event: MinterUpdated(address,bool)
+          handler: handleMinterUpdated
       file: ./src/seabrick.ts
   - kind: ethereum
     name: SeabrickMarket
