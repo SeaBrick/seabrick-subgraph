@@ -79,7 +79,7 @@ export function handleBuy(event: BuyEvent): void {
     entity.aggregator = aggregator.id;
 
     // Update the total collected
-    let erc20Token = getERC20Token(aggregator.token);
+    let erc20Token = getERC20Token(Address.fromBytes(aggregator.token));
     erc20Token.totalCollected = erc20Token.totalCollected.plus(
       event.params.amountSpent
     );
@@ -106,7 +106,7 @@ export function handleClaimed(event: ClaimedEvent): void {
     entity.aggregator = aggregator.id;
 
     // Update the total collected
-    let erc20Token = getERC20Token(aggregator.token);
+    let erc20Token = getERC20Token(Address.fromBytes(aggregator.token));
     erc20Token.totalCollected = BigInt.zero();
 
     entity.blockNumber = event.block.number;
