@@ -1,12 +1,3 @@
-type OwnershipTransferred @entity(immutable: true) {
-  id: Bytes!
-  previousOwner: Bytes! # address
-  newOwner: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
 type Transfer @entity(immutable: true) {
   id: Bytes!
   from: Bytes! # address
@@ -17,11 +8,44 @@ type Transfer @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
+type SeabrickContract @entity {
+  id: Bytes! # address
+  owner: Bytes! # address
+  name: String
+  symbol: String
+  totalSupply: BigInt!
+}
+
 type Account @entity {
   id: Bytes! # address
+  tokens: [Token!] @derivedFrom(field: "owner")
 }
 
 type Token @entity {
   id: Bytes!
+  owner: Account!
   tokenId: BigInt!
+}
+
+###########
+
+type SeabrickMarketContract @entity {
+  id: Bytes! # address
+  owner: Bytes! # address
+  price: BigInt! # USD Price
+  token: Bytes! # Address
+}
+
+type AggregatorData @entity {
+  id: Bytes! # address
+  name: Bytes! # Agregator hash name
+  aggregator: Bytes! # aggregator address
+  token: ERC20Token! @derivedFrom(field: "aggregator") # erc20 address
+}
+
+type ERC20Token @entity {
+  id: Bytes! # address
+  address: Bytes! # address
+  totalCollected: BigInt!
+  aggregator: AggregatorData!
 }
