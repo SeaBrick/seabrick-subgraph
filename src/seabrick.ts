@@ -1,5 +1,6 @@
 import { Address, BigInt } from "@graphprotocol/graph-ts";
 import {
+  MinterUpdated,
   OwnershipTransferred as OwnershipTransferredEvent,
   Transfer as TransferEvent,
 } from "../generated/Seabrick/ISeabrick";
@@ -69,4 +70,10 @@ export function handleTransfer(event: TransferEvent): void {
   transferEntity.save();
   seabrickContract.save();
   token.save();
+}
+
+export function handleMinterUpdated(event: MinterUpdated): void {
+  let account = getAccount(event.params.minter);
+  account.isMinter = event.params.status;
+  account.save();
 }

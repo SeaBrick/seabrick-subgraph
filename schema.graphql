@@ -20,6 +20,7 @@ type SeabrickContract @entity {
 type Account @entity {
   id: Bytes! # address
   tokens: [Token!]! @derivedFrom(field: "owner")
+  isMinter: Boolean!
 }
 
 type Token @entity {

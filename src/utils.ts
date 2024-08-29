@@ -28,6 +28,7 @@ export function getAccount(account_: Address): Account {
 
   if (!entity) {
     entity = new Account(account_);
+    entity.isMinter = false;
   }
 
   return entity;
