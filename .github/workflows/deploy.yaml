@@ -1,0 +1,42 @@
+name: Seabrick subgraph CI
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Extract version from package.json
+        id: extract_version
+        run: echo "VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
+
+      - name: Print version
+        run: echo "Version is $VERSION"
+
+      - name: Codegen
+        run: npm run codegen
+
+      - name: Build
+        run: npm run build
+
+      - name: TheGraph authentication
+        env:
+          GRAPH_API_TOKEN: ${{ secrets.GRAPH_API_TOKEN}}
+        run: npx graph auth --studio $GRAPH_API_TOKEN
+
+      - name: TheGraph deployment
+        run: npx graph deploy --studio seabrick --version-label $VERSION
