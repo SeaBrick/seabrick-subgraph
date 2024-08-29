@@ -1,0 +1,64 @@
+specVersion: 1.0.0
+indexerHints:
+  prune: auto
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Seabrick
+    network: arbitrum-sepolia
+    source:
+      address: "0x69e0ad478f3459973174994c00b4fa37dba269f9"
+      abi: ISeabrick
+      startBlock: 75086213
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Approval
+        - ApprovalForAll
+        - OwnershipTransferred
+        - Transfer
+      abis:
+        - name: ISeabrick
+          file: ./abis/ISeabrick.json
+      eventHandlers:
+        - event: Approval(indexed address,indexed address,indexed uint256)
+          handler: handleApproval
+        - event: ApprovalForAll(indexed address,indexed address,bool)
+          handler: handleApprovalForAll
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/seabrick.ts
+  - kind: ethereum
+    name: SeabrickMarket
+    network: arbitrum-sepolia
+    source:
+      address: "0x8649b0017ef4b4162bc4f6c9d2f3889dda920466"
+      abi: IMarket
+      startBlock: 75086287
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Approval
+        - ApprovalForAll
+        - OwnershipTransferred
+        - Transfer
+      abis:
+        - name: IMarket
+          file: ./abis/IMarket.json
+      eventHandlers:
+        - event: AggregatorAdded(bytes32,address,address)
+          handler: handleAggregatorAdded
+        - event: Buy(address)
+          handler: handleBuy
+        - event: Claimed(address,uint256)
+          handler: handleClaimed
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+      file: ./src/market.ts

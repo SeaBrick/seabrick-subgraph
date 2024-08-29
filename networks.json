@@ -1,0 +1,8 @@
+{
+  "arbitrum-sepolia": {
+    "seabrick": {
+      "address": "0x69e0ad478f3459973174994c00b4fa37dba269f9",
+      "startBlock": 75086213
+    }
+  }
+}
