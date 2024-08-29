@@ -17,19 +17,22 @@ export function handleOwnershipTransferred(
 }
 
 export function handleTransfer(event: TransferEvent): void {
+  let fromAddress = event.params.from;
+  let toAddress = event.params.to;
+
   // Token entity
   let token = getToken(event.params.tokenId);
-  token.owner = event.params.to; // Always the `to` address will be the new owner
+  token.owner = toAddress; // Always the `to` address will be the new owner
 
   // Account entities (never create an Account with zero address)
-  if (event.params.from != Address.zero()) {
-    let account = getAccount(event.params.from);
+  if (fromAddress != Address.zero()) {
+    let account = getAccount(fromAddress);
 
     account.save();
   }
 
-  if (event.params.to != Address.zero()) {
-    let account = getAccount(event.params.to);
+  if (toAddress != Address.zero()) {
+    let account = getAccount(toAddress);
 
     account.save();
   }
@@ -38,14 +41,14 @@ export function handleTransfer(event: TransferEvent): void {
   let seabrickContract = getSeabrickContract(event.address);
 
   // This is a Mint
-  if (event.params.from == Address.zero()) {
+  if (fromAddress == Address.zero()) {
     seabrickContract.totalSupply = seabrickContract.totalSupply.plus(
       BigInt.fromU32(1)
     );
   }
 
   // This is a Burn
-  if (event.params.to == Address.zero()) {
+  if (toAddress == Address.zero()) {
     seabrickContract.totalSupply = seabrickContract.totalSupply.minus(
       BigInt.fromU32(1)
     );
@@ -59,8 +62,8 @@ export function handleTransfer(event: TransferEvent): void {
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
 
-  transferEntity.from = event.params.from;
-  transferEntity.to = event.params.to;
+  transferEntity.from = fromAddress;
+  transferEntity.to = toAddress;
   transferEntity.tokenId = event.params.tokenId;
   transferEntity.token = token.id;
   transferEntity.blockNumber = event.block.number;

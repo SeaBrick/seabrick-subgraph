@@ -30,8 +30,6 @@ type Token @entity {
   burned: Boolean!
 }
 
-###########
-
 type SeabrickMarketContract @entity {
   id: Bytes! # address
   owner: Bytes! # address
