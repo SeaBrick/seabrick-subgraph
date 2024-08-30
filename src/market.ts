@@ -7,6 +7,7 @@ import {
   SaleDetails as SaleDetailsEvent,
 } from "../generated/SeabrickMarket/IMarket";
 import { AggregatorV3Interface } from "../generated/SeabrickMarket/AggregatorV3Interface";
+import { IERC20 } from "../generated/SeabrickMarket/IERC20";
 import { AggregatorData, Buy, Claimed, ERC20Token } from "../generated/schema";
 import { getERC20Token, getSeabrickMarketContract } from "./utils";
 
@@ -28,12 +29,20 @@ export function handleAggregatorAdded(event: AggregatorAddedEvent): void {
   } else {
     aggregatorEntity.nameReadable = description.value;
   }
+  let aggregatorDecimals = aggregatorContract.decimals();
+  aggregatorEntity.decimals = BigInt.fromString(aggregatorDecimals.toString());
 
   // Add the token entity
-  let erc20Entity = ERC20Token.load(event.params.token);
-  if (!erc20Entity) {
-    erc20Entity = getERC20Token(event.params.token);
-  }
+  let erc20Entity = getERC20Token(event.params.token);
+  let ierc20 = IERC20.bind(event.params.token);
+
+  let erc20Decimal = ierc20.decimals();
+  let erc20Name = ierc20.name();
+  let erc20Symbol = ierc20.symbol();
+
+  erc20Entity.decimals = BigInt.fromString(erc20Decimal.toString());
+  erc20Entity.name = erc20Name;
+  erc20Entity.symbol = erc20Symbol;
 
   aggregatorEntity.token = erc20Entity.id;
 

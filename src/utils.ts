@@ -73,6 +73,7 @@ export function getERC20Token(contract_: Address): ERC20Token {
     entity = new ERC20Token(contract_);
     entity.address = contract_;
     entity.totalCollected = BigInt.zero();
+    entity.decimals = BigInt.zero()
   }
 
   return entity;

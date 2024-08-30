@@ -42,11 +42,15 @@ type AggregatorData @entity {
   name: Bytes! # Agregator hash name
   nameReadable: String!
   aggregator: Bytes! # aggregator address
+  decimals: BigInt!
   token: ERC20Token!
 }
 
 type ERC20Token @entity {
   id: Bytes! # address
+  name: String!
+  symbol: String!
+  decimals: BigInt!
   address: Bytes! # address
   totalCollected: BigInt!
   aggregator: [AggregatorData!]! @derivedFrom(field: "token")

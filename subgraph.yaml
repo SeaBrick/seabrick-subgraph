@@ -53,6 +53,8 @@ dataSources:
           file: ./abis/IMarket.json
         - name: AggregatorV3Interface
           file: ./abis/AggregatorV3Interface.json
+        - name: IERC20
+          file: ./abis/IERC20.json
       eventHandlers:
         - event: AggregatorAdded(bytes32,address,address)
           handler: handleAggregatorAdded
