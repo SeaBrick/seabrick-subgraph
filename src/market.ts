@@ -13,15 +13,14 @@ import { getERC20Token, getSeabrickMarketContract } from "./utils";
 
 export function handleAggregatorAdded(event: AggregatorAddedEvent): void {
   let name = event.params.name;
-  let aggregator = event.params.aggregator;
 
   // Add the aggregator entity
   let aggregatorEntity = new AggregatorData(name);
 
-  let aggregatorContract = AggregatorV3Interface.bind(aggregator);
+  let aggregatorContract = AggregatorV3Interface.bind(event.params.aggregator);
 
   aggregatorEntity.name = name;
-  aggregatorEntity.aggregator = aggregator;
+  aggregatorEntity.aggregator = event.params.aggregator;
 
   let description = aggregatorContract.try_description();
   if (description.reverted) {
