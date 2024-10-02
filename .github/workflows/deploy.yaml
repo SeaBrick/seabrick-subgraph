@@ -84,4 +84,4 @@ jobs:
         run: npm run build
 
       - name: TheGraph deployment
-        run: npx graph deploy --studio seabrick --version-label $VERSION
+        run: npx graph deploy --studio seabrick --version-label $NEW_VERSION
