@@ -7,6 +7,7 @@ import {
   ERC20Token,
   SeabrickMarketContract,
 } from "../generated/schema";
+import { ISeabrick } from "../generated/Seabrick/ISeabrick";
 
 export function getSeabrickContract(contract_: Address): SeabrickContract {
   let entity = SeabrickContract.load(contract_);
@@ -14,8 +15,10 @@ export function getSeabrickContract(contract_: Address): SeabrickContract {
   if (!entity) {
     entity = new SeabrickContract(contract_);
 
-    entity.name = "Seabrick NFT";
-    entity.symbol = "SB_NFT";
+    let iSeabrick = ISeabrick.bind(contract_);
+
+    entity.name = iSeabrick.name();
+    entity.symbol = iSeabrick.symbol();
     entity.totalSupply = BigInt.zero();
     entity.owner = Address.zero();
   }
@@ -73,7 +76,7 @@ export function getERC20Token(contract_: Address): ERC20Token {
     entity = new ERC20Token(contract_);
     entity.address = contract_;
     entity.totalCollected = BigInt.zero();
-    entity.decimals = BigInt.zero()
+    entity.decimals = BigInt.zero();
   }
 
   return entity;
