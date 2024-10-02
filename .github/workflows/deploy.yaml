@@ -100,7 +100,6 @@ jobs:
         run: |
           git add "package.json"
           git add "package-lock.json"
-          git add "yarn.lock"
           git commit -m "Deployment $NEW_VERSION"
           git tag $NEW_VERSION
 
