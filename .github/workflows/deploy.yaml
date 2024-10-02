@@ -12,31 +12,76 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        id: checkout
+        uses: actions/checkout@v3
 
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        id: node
+        if: steps.checkout.outcome == 'success'
+        uses: actions/setup-node@v3
 
       - name: Install dependencies
+        id: install
+        if: steps.node.outcome == 'success'
         run: npm install
 
-      - name: Extract version from package.json
-        id: extract_version
-        run: echo "VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
+      # Configure Git
+      - name: Git Config
+        id: git
+        if: steps.install.outcome == 'success'
+        # set git user and email to github actions,
+        # this email and user id will result in github user with github avatar in Github
+        run: |
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "GitHub Actions"
+
+     # Deploy a major release
+      - name: Bump Major Version
+        id: major
+        # bump major version only if the commit msg ends with [major] keyword
+        # [major] keyword must be at the end of commit msg
+        # configuration:
+        # - you can change the keyword to your desired one in the below "if" statement
+        if: steps.git.outcome == 'success' && endsWith(github.event.head_commit.message, '[major]')
+        # bump the major version without creating tag and commit and store the version in env
+        run: echo "NEW_VERSION=$(npm version major --no-git-tag-version)" >> $GITHUB_ENV
+
+      # Deploy a minor release
+      - name: Bump Minor Version
+        id: minor
+        # bump minor version only if the commit msg ends with [minor] keyword
+        # [minor] keyword must be at the end of commit msg
+        # configuration:
+        # - you can change the keyword to your desired one in the below "if" statement
+        if: steps.git.outcome == 'success' && endsWith(github.event.head_commit.message, '[minor]')
+        # bump the minor version without creating tag and commit and store the version in env
+        run: echo "NEW_VERSION=$(npm version minor --no-git-tag-version)" >> $GITHUB_ENV
+
+      # Deploy a patch release
+      - name: Bump Patch Version
+        id: patch
+        # bump patch version only if [major] and [minor] are not present in commit msg
+        # will increase patch version for any other commits that don't have major and minor keywords
+        # configuration:
+        # - alternatively you can set a keyword for bumping patch version with specific keyword
+        if: steps.git.outcome == 'success' && ! endsWith(github.event.head_commit.message, '[major]') && ! endsWith(github.event.head_commit.message, '[minor]')
+        # bump the patch version without creating tag and commit and store the version in env
+        run: echo "NEW_VERSION=$(npm version patch --no-git-tag-version)" >> $GITHUB_ENV
 
       - name: Print version
-        run: echo "Version is $VERSION"
+        run: echo "New version is $NEW_VERSION"
+
+      - name: TheGraph authentication
+        env:
+          GRAPH_API_TOKEN: ${{ secrets.GRAPH_API_TOKEN}}
+        run: npx graph auth --studio $GRAPH_API_TOKEN
+
 
       - name: Codegen
         run: npm run codegen
 
       - name: Build
         run: npm run build
-
-      - name: TheGraph authentication
-        env:
-          GRAPH_API_TOKEN: ${{ secrets.GRAPH_API_TOKEN}}
-        run: npx graph auth --studio $GRAPH_API_TOKEN
 
       - name: TheGraph deployment
         run: npx graph deploy --studio seabrick --version-label $VERSION
