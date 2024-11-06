@@ -87,6 +87,8 @@ dataSources:
       abis:
         - name: IOwnership
           file: ./abis/IOwnership.json
+        - name: ISeabrick
+          file: ./abis/ISeabrick.json
       eventHandlers:
         - event: Initialized()
           handler: handleInitialized
