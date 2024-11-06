@@ -1,4 +1,9 @@
-import { Address, BigInt, Bytes } from "@graphprotocol/graph-ts";
+import {
+  Address,
+  BigInt,
+  Bytes,
+  DataSourceContext,
+} from "@graphprotocol/graph-ts";
 
 import {
   Account,
@@ -21,6 +26,9 @@ export function getSeabrickContract(contract_: Address): SeabrickContract {
     entity.symbol = iSeabrick.symbol();
     entity.totalSupply = BigInt.zero();
     entity.owner = Address.zero();
+
+    const context = new DataSourceContext();
+    context.setBytes("seabrick-nft", contract_);
   }
 
   return entity;
@@ -64,6 +72,9 @@ export function getSeabrickMarketContract(
     entity.owner = Address.zero();
     entity.price = BigInt.zero();
     entity.token = Address.zero();
+
+    const context = new DataSourceContext();
+    context.setBytes("seabrick-market", contract_);
   }
 
   return entity;

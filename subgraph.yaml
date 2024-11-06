@@ -24,8 +24,6 @@ dataSources:
         - name: ISeabrick
           file: ./abis/ISeabrick.json
       eventHandlers:
-        - event: OwnershipTransferred(indexed address,indexed address)
-          handler: handleOwnershipTransferred
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
         - event: MinterUpdated(address,bool)
@@ -58,8 +56,6 @@ dataSources:
       eventHandlers:
         - event: AggregatorAdded(bytes32,address,address)
           handler: handleAggregatorAdded
-        - event: OwnershipTransferred(indexed address,indexed address)
-          handler: handleOwnershipTransferred
         - event: SaleDetails(address,uint256)
           handler: handleSaleDetails
         - event: Buy(address,uint256,uint256,bytes32)
@@ -67,3 +63,24 @@ dataSources:
         - event: Claimed(address,uint256,bytes32)
           handler: handleClaimed
       file: ./src/market.ts
+  - kind: ethereum
+    name: Ownership
+    network: arbitrum-sepolia
+    source:
+      address: "0x35288e3c7dbb0a422dc6e71765617c2af0b10ad2"
+      abi: IOwnership
+      startBlock: 91151049
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - SeabrickContract,
+        - SeabrickMarketContract
+      abis:
+        - name: IOwnership
+          file: ./abis/IOwnership.json
+      eventHandlers:
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+      file: ./src/ownership.ts

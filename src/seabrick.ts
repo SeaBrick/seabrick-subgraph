@@ -1,20 +1,10 @@
 import { Address, BigInt } from "@graphprotocol/graph-ts";
 import {
   MinterUpdated,
-  OwnershipTransferred as OwnershipTransferredEvent,
   Transfer as TransferEvent,
 } from "../generated/Seabrick/ISeabrick";
 import { Transfer } from "../generated/schema";
 import { getAccount, getSeabrickContract, getToken } from "./utils";
-
-export function handleOwnershipTransferred(
-  event: OwnershipTransferredEvent
-): void {
-  let entity = getSeabrickContract(event.address);
-  entity.owner = event.params.newOwner;
-
-  entity.save();
-}
 
 export function handleTransfer(event: TransferEvent): void {
   let fromAddress = event.params.from;
