@@ -25,6 +25,8 @@ dataSources:
         - name: ISeabrick
           file: ./abis/ISeabrick.json
       eventHandlers:
+        - event: Initialized()
+          handler: handleInitialized
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
         - event: MinterUpdated(address,bool)
@@ -56,6 +58,8 @@ dataSources:
         - name: IERC20
           file: ./abis/IERC20.json
       eventHandlers:
+        - event: Initialized()
+          handler: handleInitialized
         - event: AggregatorAdded(bytes32,address,address)
           handler: handleAggregatorAdded
         - event: SaleDetails(address,uint256)
@@ -84,6 +88,8 @@ dataSources:
         - name: IOwnership
           file: ./abis/IOwnership.json
       eventHandlers:
+        - event: Initialized()
+          handler: handleInitialized
         - event: OwnershipTransferred(indexed address,indexed address)
           handler: handleOwnershipTransferred
       file: ./src/ownership.ts
