@@ -5,10 +5,16 @@ import { getSeabrickMarketContract } from "./utils";
 export function handleOwnershipTransferred(
   event: OwnershipTransferredEvent
 ): void {
+  log.info("XD_1 - ENTER HANDLER", []);
+
   // Get the addresses from the context
   const context = dataSource.context();
+  log.info("XD_2 - CONTEXT CREATING", []);
+
   const seabrickNftAddress = context.getBytes("seabrick-nft");
+  log.info("XD_3 - CONTEXT getBytes Nft", []);
   const seabricMarkettAddress = context.getBytes("seabrick-market");
+  log.info("XD_4 - CONTEXT getBytes markeet", []);
 
   if (!seabrickNftAddress || !seabricMarkettAddress) {
     if (!seabrickNftAddress) {
