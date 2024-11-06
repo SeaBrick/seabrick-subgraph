@@ -37,10 +37,6 @@ export function getSeabrickContract(contract_: Address): SeabrickContract {
     entity.symbol = iSeabrick.symbol();
     entity.totalSupply = BigInt.zero();
     entity.owner = Address.zero();
-
-    let ownerSettings = getOwnershipSettings();
-    ownerSettings.seabrickContractAddress = contract_;
-    ownerSettings.save();
   }
 
   return entity;
@@ -84,10 +80,6 @@ export function getSeabrickMarketContract(
     entity.owner = Address.zero();
     entity.price = BigInt.zero();
     entity.token = Address.zero();
-
-    let ownerSettings = getOwnershipSettings();
-    ownerSettings.seabrickMarketAddress = contract_;
-    ownerSettings.save();
   }
 
   return entity;

@@ -1,10 +1,23 @@
 import { Address, BigInt } from "@graphprotocol/graph-ts";
 import {
+  Initialized as InitializedEvent,
   MinterUpdated,
   Transfer as TransferEvent,
 } from "../generated/Seabrick/ISeabrick";
 import { Transfer } from "../generated/schema";
-import { getAccount, getSeabrickContract, getToken } from "./utils";
+import {
+  getAccount,
+  getOwnershipSettings,
+  getSeabrickContract,
+  getToken,
+} from "./utils";
+
+export function handleInitialized(event: InitializedEvent): void {
+  const ownerSettings = getOwnershipSettings();
+  ownerSettings.seabrickContractAddress = event.address;
+
+  ownerSettings.save();
+}
 
 export function handleTransfer(event: TransferEvent): void {
   let fromAddress = event.params.from;

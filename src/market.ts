@@ -3,12 +3,24 @@ import {
   AggregatorAdded as AggregatorAddedEvent,
   Buy as BuyEvent,
   Claimed as ClaimedEvent,
+  Initialized as InitializedEvent,
   SaleDetails as SaleDetailsEvent,
 } from "../generated/SeabrickMarket/IMarket";
 import { AggregatorV3Interface } from "../generated/SeabrickMarket/AggregatorV3Interface";
 import { IERC20 } from "../generated/SeabrickMarket/IERC20";
 import { AggregatorData, Buy, Claimed, ERC20Token } from "../generated/schema";
-import { getERC20Token, getSeabrickMarketContract } from "./utils";
+import {
+  getERC20Token,
+  getOwnershipSettings,
+  getSeabrickMarketContract,
+} from "./utils";
+
+export function handleInitialized(event: InitializedEvent): void {
+  const ownerSettings = getOwnershipSettings();
+  ownerSettings.seabrickMarketAddress = event.address;
+
+  ownerSettings.save();
+}
 
 export function handleAggregatorAdded(event: AggregatorAddedEvent): void {
   let name = event.params.name;
