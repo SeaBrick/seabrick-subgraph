@@ -1,19 +1,29 @@
-import {
-  Address,
-  BigInt,
-  Bytes,
-  DataSourceContext,
-  log,
-} from "@graphprotocol/graph-ts";
-
+import { Address, BigInt, Bytes } from "@graphprotocol/graph-ts";
 import {
   Account,
   SeabrickContract,
   Token,
   ERC20Token,
   SeabrickMarketContract,
+  OwnershipSettings,
 } from "../generated/schema";
 import { ISeabrick } from "../generated/Seabrick/ISeabrick";
+
+export function getOwnershipSettings(): OwnershipSettings {
+  const id = "contracts";
+  let entity = OwnershipSettings.load(id);
+
+  if (!entity) {
+    entity = new OwnershipSettings(id);
+
+    entity.seabrickContractAddress = Address.zero();
+    entity.seabrickMarketAddress = Address.zero();
+
+    entity.save();
+  }
+
+  return entity;
+}
 
 export function getSeabrickContract(contract_: Address): SeabrickContract {
   let entity = SeabrickContract.load(contract_);
@@ -28,9 +38,9 @@ export function getSeabrickContract(contract_: Address): SeabrickContract {
     entity.totalSupply = BigInt.zero();
     entity.owner = Address.zero();
 
-    log.info("NT_1 - ADDING CONTEXT NFT", []);
-    const context = new DataSourceContext();
-    context.setBytes("seabrick-nft", contract_);
+    let ownerSettings = getOwnershipSettings();
+    ownerSettings.seabrickContractAddress = contract_;
+    ownerSettings.save();
   }
 
   return entity;
@@ -75,9 +85,9 @@ export function getSeabrickMarketContract(
     entity.price = BigInt.zero();
     entity.token = Address.zero();
 
-    log.info("NT_1 - ADDING CONTEXT MARKET", []);
-    const context = new DataSourceContext();
-    context.setBytes("seabrick-market", contract_);
+    let ownerSettings = getOwnershipSettings();
+    ownerSettings.seabrickMarketAddress = contract_;
+    ownerSettings.save();
   }
 
   return entity;

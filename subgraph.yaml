@@ -20,6 +20,7 @@ dataSources:
         - SeabrickContract
         - Token
         - Transfer
+        - OwnershipSettings
       abis:
         - name: ISeabrick
           file: ./abis/ISeabrick.json
@@ -41,11 +42,12 @@ dataSources:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - AggregatorData,
-        - Buy,
-        - Claimed,
-        - ERC20Token,
-        - SeabrickMarketContract,
+        - AggregatorData
+        - Buy
+        - Claimed
+        - ERC20Token
+        - SeabrickMarketContract
+        - OwnershipSettings
       abis:
         - name: IMarket
           file: ./abis/IMarket.json
@@ -75,8 +77,9 @@ dataSources:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - SeabrickContract,
+        - SeabrickContract
         - SeabrickMarketContract
+        - OwnershipSettings
       abis:
         - name: IOwnership
           file: ./abis/IOwnership.json

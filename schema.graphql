@@ -1,3 +1,10 @@
+type OwnershipSettings @entity {
+  id: ID!
+  seabrickContractAddress: Bytes!
+  seabrickMarketAddress: Bytes!
+}
+
+
 type Transfer @entity(immutable: true) {
   id: Bytes!
   from: Bytes! # address

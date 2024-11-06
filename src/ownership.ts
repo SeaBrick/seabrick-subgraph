@@ -1,27 +1,25 @@
-import { dataSource, Address, log } from "@graphprotocol/graph-ts";
+import { Address, log } from "@graphprotocol/graph-ts";
 import { OwnershipTransferred as OwnershipTransferredEvent } from "../generated/Ownership/IOwnership";
-import { getSeabrickMarketContract } from "./utils";
+import { getOwnershipSettings, getSeabrickMarketContract } from "./utils";
 
 export function handleOwnershipTransferred(
   event: OwnershipTransferredEvent
 ): void {
-  log.info("XD_1 - ENTER HANDLER", []);
+  // Get the addresses from the entity settins
+  const ownerSettings = getOwnershipSettings();
 
-  // Get the addresses from the context
-  const context = dataSource.context();
-  log.info("XD_2 - CONTEXT CREATING", []);
+  const seabrickNftAddress = ownerSettings.seabrickContractAddress;
+  const seabricMarkettAddress = ownerSettings.seabrickMarketAddress;
 
-  const seabrickNftAddress = context.getBytes("seabrick-nft");
-  log.info("XD_3 - CONTEXT getBytes Nft", []);
-  const seabricMarkettAddress = context.getBytes("seabrick-market");
-  log.info("XD_4 - CONTEXT getBytes markeet", []);
-
-  if (!seabrickNftAddress || !seabricMarkettAddress) {
-    if (!seabrickNftAddress) {
+  if (
+    seabrickNftAddress == Address.zero() ||
+    seabricMarkettAddress == Address.zero()
+  ) {
+    if (seabrickNftAddress == Address.zero()) {
       log.info("XD_1 - No seabrickNftAddress to create owner", []);
     }
 
-    if (!seabricMarkettAddress) {
+    if (seabricMarkettAddress == Address.zero()) {
       log.info("XD_1 - No seabricMarkettAddress to create owner", []);
     }
 
@@ -29,14 +27,10 @@ export function handleOwnershipTransferred(
   }
 
   // Change the owner on both
-  let seabrickContract = getSeabrickMarketContract(
-    Address.fromBytes(seabrickNftAddress)
-  );
+  let seabrickContract = getSeabrickMarketContract(seabrickNftAddress);
   seabrickContract.owner = event.params.newOwner;
 
-  let marketContract = getSeabrickMarketContract(
-    Address.fromBytes(seabricMarkettAddress)
-  );
+  let marketContract = getSeabrickMarketContract(seabricMarkettAddress);
   marketContract.owner = event.params.newOwner;
 
   // Save the entities
