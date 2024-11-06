@@ -8,8 +8,12 @@ export function handleOwnershipTransferred(
   // Get the addresses from the entity settins
   const ownerSettings = getOwnershipSettings();
 
-  const seabrickNftAddress = ownerSettings.seabrickContractAddress;
-  const seabricMarkettAddress = ownerSettings.seabrickMarketAddress;
+  const seabrickNftAddress = Address.fromBytes(
+    ownerSettings.seabrickContractAddress
+  );
+  const seabricMarkettAddress = Address.fromBytes(
+    ownerSettings.seabrickMarketAddress
+  );
 
   if (
     seabrickNftAddress == Address.zero() ||
