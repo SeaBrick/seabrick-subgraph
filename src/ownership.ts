@@ -1,6 +1,5 @@
-import { dataSource, Address } from "@graphprotocol/graph-ts";
+import { dataSource, Address, log } from "@graphprotocol/graph-ts";
 import { OwnershipTransferred as OwnershipTransferredEvent } from "../generated/Ownership/IOwnership";
-import { log } from "matchstick-as";
 import { getSeabrickMarketContract } from "./utils";
 
 export function handleOwnershipTransferred(
