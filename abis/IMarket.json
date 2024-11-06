@@ -1,12 +1,12 @@
 [
   {
     "inputs": [],
-    "name": "ClaimFailed",
+    "name": "AlreadyInit",
     "type": "error"
   },
   {
     "inputs": [],
-    "name": "MismatchAggregators",
+    "name": "ClaimFailed",
     "type": "error"
   },
   {
@@ -17,7 +17,12 @@
         "type": "address"
       }
     ],
-    "name": "OwnableInvalidOwner",
+    "name": "InvalidOwnership",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "MismatchAggregators",
     "type": "error"
   },
   {
@@ -34,6 +39,11 @@
   {
     "inputs": [],
     "name": "PaymentFailed",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ZeroPrice",
     "type": "error"
   },
   {
@@ -121,25 +131,6 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "previousOwner",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
-      }
-    ],
-    "name": "OwnershipTransferred",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
         "indexed": false,
         "internalType": "address",
         "name": "nftAddress",
@@ -166,9 +157,27 @@
         "internalType": "bytes32",
         "name": "name",
         "type": "bytes32"
+      },
+      {
+        "internalType": "uint8",
+        "name": "amount",
+        "type": "uint8"
       }
     ],
     "name": "buy",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "new_address",
+        "type": "address"
+      }
+    ],
+    "name": "changeOwnershipContract",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -188,6 +197,11 @@
   },
   {
     "inputs": [
+      {
+        "internalType": "address",
+        "name": "ownershipContract",
+        "type": "address"
+      },
       {
         "internalType": "uint256",
         "name": "price",
@@ -221,13 +235,6 @@
   },
   {
     "inputs": [],
-    "name": "onlyOwner",
-    "outputs": [],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "owner",
     "outputs": [
       {
@@ -237,26 +244,6 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "renounceOwnership",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
-      }
-    ],
-    "name": "transferOwnership",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   }
 ]

@@ -3,7 +3,6 @@ import {
   AggregatorAdded as AggregatorAddedEvent,
   Buy as BuyEvent,
   Claimed as ClaimedEvent,
-  OwnershipTransferred as OwnershipTransferredEvent,
   SaleDetails as SaleDetailsEvent,
 } from "../generated/SeabrickMarket/IMarket";
 import { AggregatorV3Interface } from "../generated/SeabrickMarket/AggregatorV3Interface";
@@ -47,15 +46,6 @@ export function handleAggregatorAdded(event: AggregatorAddedEvent): void {
 
   aggregatorEntity.save();
   erc20Entity.save();
-}
-
-export function handleOwnershipTransferred(
-  event: OwnershipTransferredEvent
-): void {
-  let entity = getSeabrickMarketContract(event.address);
-  entity.owner = event.params.newOwner;
-
-  entity.save();
 }
 
 export function handleSaleDetails(event: SaleDetailsEvent): void {
