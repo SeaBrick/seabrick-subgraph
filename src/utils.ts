@@ -3,6 +3,7 @@ import {
   BigInt,
   Bytes,
   DataSourceContext,
+  log,
 } from "@graphprotocol/graph-ts";
 
 import {
@@ -27,6 +28,7 @@ export function getSeabrickContract(contract_: Address): SeabrickContract {
     entity.totalSupply = BigInt.zero();
     entity.owner = Address.zero();
 
+    log.info("NT_1 - ADDING CONTEXT NFT", []);
     const context = new DataSourceContext();
     context.setBytes("seabrick-nft", contract_);
   }
@@ -73,6 +75,7 @@ export function getSeabrickMarketContract(
     entity.price = BigInt.zero();
     entity.token = Address.zero();
 
+    log.info("NT_1 - ADDING CONTEXT MARKET", []);
     const context = new DataSourceContext();
     context.setBytes("seabrick-market", contract_);
   }
