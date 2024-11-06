@@ -1,6 +1,6 @@
 import { Address, log } from "@graphprotocol/graph-ts";
 import { OwnershipTransferred as OwnershipTransferredEvent } from "../generated/Ownership/IOwnership";
-import { getOwnershipSettings, getSeabrickMarketContract } from "./utils";
+import { getOwnershipSettings, getSeabrickMarketContract, getSeabrickContract } from "./utils";
 
 export function handleOwnershipTransferred(
   event: OwnershipTransferredEvent
@@ -31,7 +31,7 @@ export function handleOwnershipTransferred(
   }
 
   // Change the owner on both
-  let seabrickContract = getSeabrickMarketContract(seabrickNftAddress);
+  let seabrickContract = getSeabrickContract(seabrickNftAddress);
   seabrickContract.owner = event.params.newOwner;
 
   let marketContract = getSeabrickMarketContract(seabricMarkettAddress);
