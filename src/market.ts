@@ -5,6 +5,8 @@ import {
   Claimed as ClaimedEvent,
   Initialized as InitializedEvent,
   SaleDetails as SaleDetailsEvent,
+  PriceAdded as PriceAddedEvent,
+  ClaimVaultAdded as ClaimVaultAddedEvent,
 } from "../generated/SeabrickMarket/IMarket";
 import { AggregatorV3Interface } from "../generated/SeabrickMarket/AggregatorV3Interface";
 import { IERC20 } from "../generated/SeabrickMarket/IERC20";
@@ -65,6 +67,7 @@ export function handleSaleDetails(event: SaleDetailsEvent): void {
 
   entity.price = event.params.price;
   entity.token = event.params.nftAddress;
+  entity.claimVault = event.params.claimVault;
 
   entity.save();
 }
@@ -106,6 +109,7 @@ export function handleClaimed(event: ClaimedEvent): void {
   if (aggregator) {
     entity.amount = event.params.amount;
     entity.token = event.params.token;
+    entity.vaultAddress = event.params.vault;
     entity.aggregator = aggregator.id;
 
     // Update the total collected
@@ -119,4 +123,20 @@ export function handleClaimed(event: ClaimedEvent): void {
     erc20Token.save();
     entity.save();
   }
+}
+
+export function handlePriceAdded(event: PriceAddedEvent): void {
+  let entity = getSeabrickMarketContract(event.address);
+
+  entity.price = event.params.newPrice;
+
+  entity.save();
+}
+
+export function handleClaimVaultAdded(event: ClaimVaultAddedEvent): void {
+  let entity = getSeabrickMarketContract(event.address);
+
+  entity.claimVault = event.params.newClaimVault;
+
+  entity.save();
 }

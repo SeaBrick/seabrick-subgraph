@@ -42,6 +42,7 @@ type SeabrickMarketContract @entity {
   owner: Bytes! # address
   price: BigInt! # USD Price
   token: Bytes! # Address
+  claimVault: Bytes! # Address
 }
 
 type AggregatorData @entity {
@@ -78,6 +79,7 @@ type Claimed @entity(immutable: true) {
   amount: BigInt!
   token: Bytes!
   aggregator: AggregatorData!
+  vaultAddress: Bytes!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
