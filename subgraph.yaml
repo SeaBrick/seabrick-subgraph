@@ -24,6 +24,8 @@ dataSources:
       abis:
         - name: ISeabrick
           file: ./abis/ISeabrick.json
+        - name: IOwnership
+          file: ./abis/IOwnership.json
       eventHandlers:
         - event: Initialized()
           handler: handleInitialized
@@ -31,6 +33,8 @@ dataSources:
           handler: handleTransfer
         - event: MinterUpdated(address,bool)
           handler: handleMinterUpdated
+        - event: SeabrickDetails(address)
+          handler: handleSeabrickDetails
       file: ./src/seabrick.ts
   - kind: ethereum
     name: SeabrickMarket
@@ -53,6 +57,8 @@ dataSources:
       abis:
         - name: IMarket
           file: ./abis/IMarket.json
+        - name: IOwnership
+          file: ./abis/IOwnership.json
         - name: AggregatorV3Interface
           file: ./abis/AggregatorV3Interface.json
         - name: IERC20

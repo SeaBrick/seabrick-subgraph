@@ -16,6 +16,7 @@ import {
   getOwnershipSettings,
   getSeabrickMarketContract,
 } from "./utils";
+import { IOwnership } from "../generated/Ownership/IOwnership";
 
 export function handleInitialized(event: InitializedEvent): void {
   const ownerSettings = getOwnershipSettings();
@@ -68,6 +69,11 @@ export function handleSaleDetails(event: SaleDetailsEvent): void {
   entity.price = event.params.price;
   entity.token = event.params.nftAddress;
   entity.claimVault = event.params.claimVault;
+
+  // Try to update the owner entity here
+  const ownershipContract = IOwnership.bind(event.params.ownershipContract);
+  const owner = ownershipContract.owner();
+  entity.owner = owner;
 
   entity.save();
 }

@@ -3,6 +3,7 @@ import {
   Initialized as InitializedEvent,
   MinterUpdated,
   Transfer as TransferEvent,
+  SeabrickDetails as SeabrickDetailsEvent,
 } from "../generated/Seabrick/ISeabrick";
 import { Transfer } from "../generated/schema";
 import {
@@ -11,12 +12,24 @@ import {
   getSeabrickContract,
   getToken,
 } from "./utils";
+import { IOwnership } from "../generated/Ownership/IOwnership";
 
 export function handleInitialized(event: InitializedEvent): void {
   const ownerSettings = getOwnershipSettings();
   ownerSettings.seabrickContractAddress = event.address;
 
   ownerSettings.save();
+}
+
+export function handleSeabrickDetails(event: SeabrickDetailsEvent): void {
+  let entity = getSeabrickContract(event.address);
+
+  // Try to update the owner entity here
+  const ownershipContract = IOwnership.bind(event.params.ownershipContract);
+  const owner = ownershipContract.owner();
+  entity.owner = owner;
+
+  entity.save();
 }
 
 export function handleTransfer(event: TransferEvent): void {

@@ -18,6 +18,7 @@ export function getOwnershipSettings(): OwnershipSettings {
 
     entity.seabrickContractAddress = Address.zero();
     entity.seabrickMarketAddress = Address.zero();
+    entity.ownershipAddress = Address.zero();
 
     entity.save();
   }

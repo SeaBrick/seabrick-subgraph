@@ -2,6 +2,7 @@ type OwnershipSettings @entity {
   id: ID!
   seabrickContractAddress: Bytes!
   seabrickMarketAddress: Bytes!
+  ownershipAddress: Bytes!
 }
 
 
