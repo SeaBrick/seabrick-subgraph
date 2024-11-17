@@ -62,12 +62,16 @@ dataSources:
           handler: handleInitialized
         - event: AggregatorAdded(bytes32,address,address)
           handler: handleAggregatorAdded
-        - event: SaleDetails(address,uint256)
+        - event: SaleDetails(address,address,address,uint256)
           handler: handleSaleDetails
         - event: Buy(address,uint256,uint256,bytes32)
           handler: handleBuy
-        - event: Claimed(address,uint256,bytes32)
+        - event: Claimed(address,uint256,bytes32,address)
           handler: handleClaimed
+        - event: PriceAdded(uint256)
+          handler: handlePriceAdded
+        - event: ClaimVaultAdded(address)
+          handler: handleClaimVaultAdded
       file: ./src/market.ts
   - kind: ethereum
     name: Ownership

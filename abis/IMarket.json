@@ -43,7 +43,7 @@
   },
   {
     "inputs": [],
-    "name": "ZeroPrice",
+    "name": "VaultZeroAddress",
     "type": "error"
   },
   {
@@ -51,6 +51,16 @@
     "inputs": [],
     "name": "Initialized",
     "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "ZeroBuyAmount",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ZeroPrice",
+    "type": "error"
   },
   {
     "anonymous": false,
@@ -114,6 +124,19 @@
       {
         "indexed": false,
         "internalType": "address",
+        "name": "newClaimVault",
+        "type": "address"
+      }
+    ],
+    "name": "ClaimVaultAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
         "name": "token",
         "type": "address"
       },
@@ -128,6 +151,12 @@
         "internalType": "bytes32",
         "name": "aggregator",
         "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "vault",
+        "type": "address"
       }
     ],
     "name": "Claimed",
@@ -137,9 +166,53 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "newPrice",
+        "type": "uint256"
+      }
+    ],
+    "name": "PriceAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": false,
         "internalType": "address",
         "name": "nftAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "ownershipContract",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "claimVault",
         "type": "address"
       },
       {
@@ -205,7 +278,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "ownershipContract",
+        "name": "ownership_contract",
         "type": "address"
       },
       {
@@ -215,7 +288,12 @@
       },
       {
         "internalType": "address",
-        "name": "nftToken",
+        "name": "nft_token",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "claim_vault",
         "type": "address"
       },
       {
@@ -250,6 +328,55 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32[]",
+        "name": "names",
+        "type": "bytes32[]"
+      },
+      {
+        "internalType": "address[]",
+        "name": "agregators",
+        "type": "address[]"
+      },
+      {
+        "internalType": "address[]",
+        "name": "tokens",
+        "type": "address[]"
+      }
+    ],
+    "name": "setAgregators",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "price",
+        "type": "uint256"
+      }
+    ],
+    "name": "setPrice",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "vault",
+        "type": "address"
+      }
+    ],
+    "name": "setVault",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   }
 ]
