@@ -62,14 +62,22 @@ export function handleOwnershipTransferred(
     ownerSettings.seabrickMarketAddress
   );
 
-  // Change the owner on both
-  let seabrickContract = getSeabrickContract(seabrickNftAddress);
-  seabrickContract.owner = event.params.newOwner;
+  const owner = event.params.newOwner;
 
-  let marketContract = getSeabrickMarketContract(seabricMarkettAddress);
-  marketContract.owner = event.params.newOwner;
+  // Change the owner on entities
+  if (seabrickNftAddress != Address.zero()) {
+    let seabrickContract = getSeabrickContract(seabrickNftAddress);
+    seabrickContract.owner = owner;
 
-  // Save the entities
-  seabrickContract.save();
-  marketContract.save();
+    // Save the entity
+    seabrickContract.save();
+  }
+
+  if (seabricMarkettAddress != Address.zero()) {
+    let marketContract = getSeabrickMarketContract(seabricMarkettAddress);
+    marketContract.owner = owner;
+
+    // Save the entity
+    marketContract.save();
+  }
 }
