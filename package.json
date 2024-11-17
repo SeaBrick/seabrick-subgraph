@@ -1,7 +1,7 @@
 {
   "name": "seabrick",
   "license": "UNLICENSED",
-  "version": "0.3.10",
+  "version": "0.3.11",
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
