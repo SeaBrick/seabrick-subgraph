@@ -5,7 +5,6 @@ type OwnershipSettings @entity {
   ownershipAddress: Bytes!
 }
 
-
 type Transfer @entity(immutable: true) {
   id: Bytes!
   from: Bytes! # address
@@ -67,7 +66,7 @@ type ERC20Token @entity {
 
 type Buy @entity(immutable: true) {
   id: Bytes!
-  amountPayed: BigInt!
+  amountPaid: BigInt!
   buyer: Bytes!
   tokenId: BigInt!
   aggregator: AggregatorData!
