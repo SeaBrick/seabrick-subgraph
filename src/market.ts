@@ -97,6 +97,7 @@ export function handleBuy(event: BuyEvent): void {
       event.params.amountSpent
     );
 
+    entity.paymentToken = erc20Token.id;
     entity.blockNumber = event.block.number;
     entity.blockTimestamp = event.block.timestamp;
     entity.transactionHash = event.transaction.hash;

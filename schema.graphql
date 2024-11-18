@@ -71,6 +71,7 @@ type Buy @entity(immutable: true) {
   buyer: Bytes!
   tokenId: BigInt!
   aggregator: AggregatorData!
+  paymentToken: ERC20Token!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
