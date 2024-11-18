@@ -67,6 +67,7 @@ type ERC20Token @entity {
 
 type Buy @entity(immutable: true) {
   id: Bytes!
+  amountPayed: BigInt!
   buyer: Bytes!
   tokenId: BigInt!
   aggregator: AggregatorData!

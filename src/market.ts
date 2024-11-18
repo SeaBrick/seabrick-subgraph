@@ -89,6 +89,7 @@ export function handleBuy(event: BuyEvent): void {
     entity.buyer = event.params.buyer;
     entity.tokenId = event.params.id;
     entity.aggregator = aggregator.id;
+    entity.amountPayed = event.params.amountSpent;
 
     // Update the total collected
     let erc20Token = getERC20Token(Address.fromBytes(aggregator.token));
