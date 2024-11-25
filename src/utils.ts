@@ -1,4 +1,10 @@
-import { Address, BigInt, Bytes } from "@graphprotocol/graph-ts";
+import {
+  Address,
+  BigInt,
+  Bytes,
+  ByteArray,
+  crypto,
+} from "@graphprotocol/graph-ts";
 import {
   Account,
   SeabrickContract,
@@ -6,8 +12,20 @@ import {
   ERC20Token,
   SeabrickMarketContract,
   OwnershipSettings,
+  VaultToken,
+  Vault,
 } from "../generated/schema";
 import { ISeabrick } from "../generated/Seabrick/ISeabrick";
+
+export function combineToId(value1: string, value2: string): Bytes {
+  return Bytes.fromHexString(
+    crypto
+      .keccak256(
+        ByteArray.fromHexString(value1).concat(ByteArray.fromHexString(value2))
+      )
+      .toHex()
+  );
+}
 
 export function getOwnershipSettings(): OwnershipSettings {
   const id = "contracts";
@@ -92,11 +110,44 @@ export function getERC20Token(contract_: Address): ERC20Token {
   if (!entity) {
     entity = new ERC20Token(contract_);
     entity.address = contract_;
-    entity.totalCollected = BigInt.zero();
     entity.decimals = BigInt.zero();
   }
 
   return entity;
+}
+
+export function getVault(id: Address): Vault {
+  let vault = Vault.load(id);
+
+  if (!vault) {
+    vault = new Vault(id);
+  }
+
+  return vault;
+}
+
+export function getVaultToken(
+  vaultAddress: Address,
+  tokenAddress: Address
+): VaultToken {
+  const id = combineToId(vaultAddress.toHex(), tokenAddress.toHex());
+
+  let vaultToken = VaultToken.load(id);
+
+  if (!vaultToken) {
+    vaultToken = new VaultToken(id);
+
+    const vault = getVault(vaultAddress);
+    const token = getERC20Token(tokenAddress);
+    vaultToken.vault = vault.id;
+    vaultToken.token = token.id;
+    vaultToken.totalCollected = BigInt.zero();
+
+    vault.save();
+    token.save();
+  }
+
+  return vaultToken;
 }
 
 function getEvenHex(value: string): string {

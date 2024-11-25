@@ -2,7 +2,7 @@ import { Address, BigInt } from "@graphprotocol/graph-ts";
 import {
   AggregatorAdded as AggregatorAddedEvent,
   Buy as BuyEvent,
-  Claimed as ClaimedEvent,
+  Collected as CollectedEvent,
   Initialized as InitializedEvent,
   SaleDetails as SaleDetailsEvent,
   PriceAdded as PriceAddedEvent,
@@ -10,11 +10,20 @@ import {
 } from "../generated/SeabrickMarket/IMarket";
 import { AggregatorV3Interface } from "../generated/SeabrickMarket/AggregatorV3Interface";
 import { IERC20 } from "../generated/SeabrickMarket/IERC20";
-import { AggregatorData, Buy, Claimed, ERC20Token } from "../generated/schema";
 import {
+  AggregatorData,
+  Buy,
+  ERC20Token,
+  Vault,
+  VaultToken,
+} from "../generated/schema";
+import {
+  combineToId,
   getERC20Token,
   getOwnershipSettings,
   getSeabrickMarketContract,
+  getVault,
+  getVaultToken,
 } from "./utils";
 import { IOwnership } from "../generated/Ownership/IOwnership";
 
@@ -88,49 +97,30 @@ export function handleBuy(event: BuyEvent): void {
   if (aggregator) {
     entity.buyer = event.params.buyer;
     entity.tokenId = event.params.id;
-    entity.aggregator = aggregator.id;
     entity.amountPaid = event.params.amountSpent;
+    entity.aggregator = aggregator.id;
+    entity.paymentToken = aggregator.token;
 
-    // Update the total collected
-    let erc20Token = getERC20Token(Address.fromBytes(aggregator.token));
-    erc20Token.totalCollected = erc20Token.totalCollected.plus(
-      event.params.amountSpent
-    );
-
-    entity.paymentToken = erc20Token.id;
     entity.blockNumber = event.block.number;
     entity.blockTimestamp = event.block.timestamp;
     entity.transactionHash = event.transaction.hash;
 
-    erc20Token.save();
     entity.save();
   }
 }
 
-export function handleClaimed(event: ClaimedEvent): void {
-  let entity = new Claimed(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
+export function handleCollected(event: CollectedEvent): void {
+  // Just generate to create the entity if does not exist
+  let vault = getVault(event.params.vault);
+
+  let vaultToken = getVaultToken(event.params.vault, event.params.token);
+
+  vaultToken.totalCollected = vaultToken.totalCollected.plus(
+    event.params.amount
   );
 
-  let aggregator = AggregatorData.load(event.params.aggregator);
-
-  if (aggregator) {
-    entity.amount = event.params.amount;
-    entity.token = event.params.token;
-    entity.vaultAddress = event.params.vault;
-    entity.aggregator = aggregator.id;
-
-    // Update the total collected
-    let erc20Token = getERC20Token(Address.fromBytes(aggregator.token));
-    erc20Token.totalCollected = BigInt.zero();
-
-    entity.blockNumber = event.block.number;
-    entity.blockTimestamp = event.block.timestamp;
-    entity.transactionHash = event.transaction.hash;
-
-    erc20Token.save();
-    entity.save();
-  }
+  vault.save();
+  vaultToken.save();
 }
 
 export function handlePriceAdded(event: PriceAddedEvent): void {

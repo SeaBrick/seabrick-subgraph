@@ -60,8 +60,8 @@ type ERC20Token @entity {
   symbol: String!
   decimals: BigInt!
   address: Bytes! # address
-  totalCollected: BigInt!
   aggregator: [AggregatorData!]! @derivedFrom(field: "token")
+  vaults: [VaultToken!]! @derivedFrom(field: "token")
 }
 
 type Buy @entity(immutable: true) {
@@ -76,13 +76,17 @@ type Buy @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type Claimed @entity(immutable: true) {
-  id: Bytes!
-  amount: BigInt!
-  token: Bytes!
-  aggregator: AggregatorData!
-  vaultAddress: Bytes!
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+# Vault per address that includes all the tokenVaults
+type Vault @entity {
+  id: Bytes! # Address if this vault
+  tokenVaults: [VaultToken!]! @derivedFrom(field: "vault")
+}
+
+type VaultToken @entity {
+  id: Bytes! # kecck256(vault address + token address)
+  vault: Vault!
+  # Token of this vault
+  token: ERC20Token!
+  # Total collected only for this vault on this token
+  totalCollected: BigInt!
 }
