@@ -159,7 +159,7 @@
         "type": "address"
       }
     ],
-    "name": "Claimed",
+    "name": "Collected",
     "type": "event"
   },
   {

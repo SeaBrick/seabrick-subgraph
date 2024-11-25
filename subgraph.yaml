@@ -72,7 +72,7 @@ dataSources:
           handler: handleSaleDetails
         - event: Buy(address,uint256,uint256,bytes32)
           handler: handleBuy
-        - event: Claimed(address,uint256,bytes32,address)
+        - event: Collected(address,uint256,bytes32,address)
           handler: handleClaimed
         - event: PriceAdded(uint256)
           handler: handlePriceAdded
