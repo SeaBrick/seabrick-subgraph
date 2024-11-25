@@ -85,6 +85,10 @@ export function handleSaleDetails(event: SaleDetailsEvent): void {
   entity.owner = owner;
 
   entity.save();
+
+  // Just generate to create the entity if does not exist
+  let vault = getVault(event.params.claimVault);
+  vault.save();
 }
 
 export function handleBuy(event: BuyEvent): void {
